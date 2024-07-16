@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diffie-Hellman Key Exchange</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif; 
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .party {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            width: 45%;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Diffie-Hellman Key Exchange</h1>
+    <div class="container">
+        <div class="party">
+            <h2>Alice</h2>
+            <label for="alicePrivateKey">Alice's Private Key (a):</label>
+            <input type="text" id="alicePrivateKey" /><br>
+            <button onclick="generateAliceKeys()">Generate Alice's Public Key</button>
+            <div>
+                <label for="alicePublicKey">Alice's Public Key (A):</label>
+                <span id="alicePublicKey"></span>
+            </div>
+        </div>
+
+        <div class="party">
+            <h2>Bob</h2>
+            <label for="bobPrivateKey">Bob's Private Key (b):</label>
+            <input type="text" id="bobPrivateKey" /><br>
+            <button onclick="generateBobKeys()">Generate Bob's Public Key</button>
+            <div>
+                <label for="bobPublicKey">Bob's Public Key (B):</label>
+                <span id="bobPublicKey"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="result">
+        <h2>Shared Secret Key</h2>
+        <button onclick="deriveSharedSecret()">Derive Shared Secret Key</button>
+        <div>
+            <label for="sharedSecret">Shared Secret Key:</label>
+            <span id="sharedSecret"></span>
+        </div>
+    </div>
+
+    <script>
+        // Constants for the Diffie-Hellman calculation (usually prime numbers)
+        const p = BigInt(23); // Prime number
+        const g = BigInt(5);  // Generator
+
+        let alicePrivateKey, alicePublicKey, bobPrivateKey, bobPublicKey, sharedSecret;
+
+        function generateRandomPrivateKey() {
+            return BigInt(Math.floor(Math.random() * 10) + 1); // Generate a random private key (a or b)
+        }
+
+        function generateAliceKeys() {
+            alicePrivateKey = generateRandomPrivateKey();
+            alicePublicKey = (g ** alicePrivateKey) % p;
+            document.getElementById('alicePublicKey').innerText = alicePublicKey;
+        }
+
+        function generateBobKeys() {
+            bobPrivateKey = generateRandomPrivateKey();
+            bobPublicKey = (g ** bobPrivateKey) % p;
+            document.getElementById('bobPublicKey').innerText = bobPublicKey;
+        }
+
+        function deriveSharedSecret() {
+            sharedSecret = (bobPublicKey ** alicePrivateKey) % p;
+            document.getElementById('sharedSecret').innerText = sharedSecret;
+        }
+    </script>
+</body>
+</html>
